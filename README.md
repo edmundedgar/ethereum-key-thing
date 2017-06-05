@@ -5,3 +5,12 @@ This is intended to be very simple, without all the key password and formatting 
 I made this for myself, I haven't thought very hard about documenting it so that other people can use it without all their stuff getting hacked.
 
 Hopefully you can make a secure key with it, but maybe not, who knows. YMMV, ABSOLUTELY NO WARRANTY etc etc etc.
+
+
+== Usage ==
+
+Don't use it. But if you insist, 
+
+`pip install -r requirements.txt`
+
+Then run `python keything.py` to get a list of options.
