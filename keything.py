@@ -39,6 +39,13 @@ if action in ["generate", "private"]:
     m = Mnemonic('english')
     e = m.to_entropy(words)
     he = encode_hex(e)
+    # You can't start an eth address privkey with 00, apparently.
+    # Not allowing trailing zeros either because I'm superstitious about padding bugs
+    # Very big keys are also bad (really > 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141)
+    if he[:2] == "00" or he[-2:] == "00" or he[:8] == "ffffffff":
+        print "Unluckily got an invalid private key, exiting"
+        print "0x"+he
+        sys.exit(1)
 
     print "Your private key as hex"
     print "0x"+he
