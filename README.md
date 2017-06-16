@@ -15,14 +15,3 @@ Don't use it. But if you insist,
 `pip install -r requirements.txt`
 
 Then run `python keything.py` to get a list of options.
-
-## Deployment
-
-You can deploy the whole thing (python and libraries) onto a USB stick as follows:
-
-virtualenv --no-site-packages --distribute venv
-virtualenv --relocatable venv/
-source venv/bin/activate
-pip install -r requirements
-deactivate
-sudo rsync -urL simpleethkeything/ /mnt/usb/simpleethkeything/
