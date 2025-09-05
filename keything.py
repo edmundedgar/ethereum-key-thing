@@ -1,7 +1,6 @@
 from mnemonic import Mnemonic
-from ethereum.utils import privtoaddr, decode_hex, encode_hex
+from eth_keys import keys
 import sys
-
 
 if len(sys.argv) > 3 or len(sys.argv) < 2:
     action = "usage"
@@ -38,7 +37,7 @@ if action == "private":
 if action in ["generate", "private"]:
     m = Mnemonic('english')
     e = m.to_entropy(words)
-    he = encode_hex(e)
+    he = bytes.hex(bytes(e))
     # You can't start an eth address privkey with 00, apparently.
     # Not allowing trailing zeros either because I'm superstitious about padding bugs
     # Very big keys are also bad (really > 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141)
@@ -46,6 +45,8 @@ if action in ["generate", "private"]:
         print("Unluckily got an invalid private key, exiting")
         print("0x"+he)
         sys.exit(1)
+
+    pk = keys.PrivateKey(bytes(e))
 
     print("Your private key as hex")
     print("0x"+he)
@@ -55,22 +56,23 @@ if action in ["generate", "private"]:
     print(words)
     print("")
 
-    addr = "0x"+encode_hex(privtoaddr(decode_hex(he)))
+    pub = keys.PublicKey.from_private(pk)
+    addr = pub.to_address()
 
 if action == "addr":
     addr_words = sys.argv[2]
     print("loading address with words %s", (addr_words))
     am = Mnemonic('english')
     amm = am.to_entropy(addr_words)
-    addr = "0x"+encode_hex(amm)
-    #addr_words = encode_hex(am.to_entropy(amm))
+    addr = "0x" + bytes.hex(bytes(amm))
 
 print("Your address, as an address")
 print(addr)
 print("")
 
 am = Mnemonic('english')
-amm = am.to_mnemonic(decode_hex(addr[2:]))
+print("mnemonic from addr")
+amm = am.to_mnemonic(bytes.fromhex(addr[2:]))
 
 print("Your address, as a mnemomic")
 print(amm)
